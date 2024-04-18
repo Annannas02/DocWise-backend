@@ -29,4 +29,14 @@ def get_user_by_id(request, user_id):
     
     # Return the user data
     return Response(serialized_user.data, status=status.HTTP_200_OK)
-   
+
+@api_view(['GET'])
+def get_user_by_username(request, username):
+    # Retrieve the user by username, return 404 if not found
+    user = User.objects.get(username=username)
+
+    # Serialize the user data
+    serialized_user = serializers.UserSerializer(user)
+    
+    # Return the user data
+    return Response(serialized_user.data, status=status.HTTP_200_OK)
