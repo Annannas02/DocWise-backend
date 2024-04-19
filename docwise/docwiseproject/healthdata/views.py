@@ -12,10 +12,10 @@ class HealthDataList(generics.ListCreateAPIView):
     queryset = models.HealthData.objects.all()
     serializer_class = serializers.HealthDataSerializer
 
-@api_view(['GET'])
-def get_health_by_username(request, username):
+@api_view(['POST'])
+def get_health_by_username(request):
     # Retrieve the user by username, return 404 if not found
-    user = get_object_or_404(User, username=username)
+    user = get_object_or_404(User, username=request.data.get("username"))
 
     # Retrieve all health data objects associated with the user
     healthdata = models.HealthData.objects.filter(personid=user.id)
@@ -26,10 +26,11 @@ def get_health_by_username(request, username):
     # Return the serialized data
     return Response(serialized_data.data, status=status.HTTP_200_OK)
 
-@api_view(['GET'])
-def get_latest_health_by_username(request, username):
+@api_view(['POST'])
+def get_latest_health_by_username(request):
     # Retrieve the user by username, return 404 if not found
-    user = get_object_or_404(User, username=username)
+    print(request.data.get("username"))
+    user = User.objects.get(username=request.data.get("username"))
 
     # Retrieve the latest health data object associated with the user
     latest_healthdata = models.HealthData.objects.filter(personid=user.id).order_by('-timestamp').first()

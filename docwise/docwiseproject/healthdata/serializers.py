@@ -5,4 +5,4 @@ class HealthDataSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.HealthData
-        fields = '__all__'
+        exclude = ('id', 'personid')

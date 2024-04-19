@@ -20,9 +20,9 @@ def get_authenticated_user(request):
     return Response(serialized_data.data, status=status.HTTP_200_OK)
 
 @api_view(['GET'])
-def get_user_by_id(request, user_id):
+def get_user_by_id(request):
     # Retrieve the user by ID, return 404 if not found
-    user = get_object_or_404(User, pk=user_id)
+    user = get_object_or_404(User, pk=request.data.get("id"))
     
     # Serialize the user data
     serialized_user = serializers.UserSerializer(user)
@@ -31,9 +31,9 @@ def get_user_by_id(request, user_id):
     return Response(serialized_user.data, status=status.HTTP_200_OK)
 
 @api_view(['GET'])
-def get_user_by_username(request, username):
+def get_user_by_username(request):
     # Retrieve the user by username, return 404 if not found
-    user = User.objects.get(username=username)
+    user = User.objects.get(username=request.data.get("username"))
 
     # Serialize the user data
     serialized_user = serializers.UserSerializer(user)
