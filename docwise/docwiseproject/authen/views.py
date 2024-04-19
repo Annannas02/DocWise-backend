@@ -7,6 +7,7 @@ import pyotp
 from otp.models import OTP
 from user.serializers import UserSerializer
 from user import models as usermodels
+from profiles.models import Profile
 from authen import serializers
 from datetime import timedelta
 from rest_framework.permissions import AllowAny, IsAuthenticated
@@ -27,6 +28,12 @@ def register_user(request):
     username = request.data.get("username")
     unhashed_password = request.data.get("password")
 
+    name = request.data.get("name")
+    surname = request.data.get("surname")
+    gender = request.data.get("gender")
+    photo = request.data.get("photo")
+    dob = request.data.get("dob")
+
     hashed_password = hashers.make_password(unhashed_password)
     secret = pyotp.random_base32()
     
@@ -35,6 +42,15 @@ def register_user(request):
         password=hashed_password,
         phone=phone,
         secret=secret,
+    )
+
+    profile = Profile.objects.create(
+        personid = user,
+        name=name,
+        surname=surname,
+        gender_type=gender,
+        dob=dob,
+        img=photo
     )
     user_serialized = UserSerializer(user)
     return Response({"message" : "User created successfully", "user": user_serialized.data}, status=status.HTTP_200_OK)
