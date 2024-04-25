@@ -14,7 +14,7 @@ class ProfileList(generics.ListCreateAPIView):
     queryset = models.Profile.objects.all()
     serializer_class = serializers.ProfileSerializer
 
-@api_view(['POST'])
+@api_view(['PUT'])
 @permission_classes([IsAuthenticated])
 def modify_profile(request):
     user = request.user
@@ -25,6 +25,7 @@ def modify_profile(request):
         img = request.data.get("photo"),
         dob = request.data.get("dob")
         )
-    return Response(status=status.HTTP_200_OK)
+    serialized_profile = serializers.ProfileSerializer(profile)
+    return Response(serialized_profile.data, status=status.HTTP_200_OK)
 
     

@@ -33,10 +33,8 @@ class Medication(models.Model):
 
     personid = models.ForeignKey(User, on_delete=models.CASCADE)
     name = models.CharField(max_length=100)
-    medication_type = models.IntegerField(choices=MEDICATION_TYPE)
-    strength = models.IntegerField()
-    unit_type = models.IntegerField(choices=UNIT_TYPE)
-    frequency = models.CharField(max_length=50)
-    timestamp = models.DateTimeField()
+    medication_type = models.PositiveIntegerField(choices=MEDICATION_TYPE)
+    strength = models.PositiveIntegerField()
+    unit_type = models.PositiveIntegerField(choices=UNIT_TYPE)
     notes = models.CharField(max_length=500)
     

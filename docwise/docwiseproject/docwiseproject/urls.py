@@ -29,6 +29,7 @@ urlpatterns = [
         path('medication/', include('medication.urls')),
         path('profiles/', include('profiles.urls')),
         path('symptoms/', include('symptoms.urls')),
+        path('reminders/', include('reminders.urls')),
         path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
         path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     ]))

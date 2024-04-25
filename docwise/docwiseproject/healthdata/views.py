@@ -14,45 +14,37 @@ class HealthDataList(generics.ListCreateAPIView):
     queryset = models.HealthData.objects.all()
     serializer_class = serializers.HealthDataSerializer
 
-@api_view(['POST'])
-def get_health_by_username(request):
-    # Retrieve the user by username, return 404 if not found
-    user = get_object_or_404(User, username=request.data.get("username"))
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def get_health_statistics(request):
+    user = request.user
 
-    # Retrieve all health data objects associated with the user
     healthdata = models.HealthData.objects.filter(personid=user.id)
-    
-    # Serialize the health data objects
+
     serialized_data = serializers.HealthDataSerializer(healthdata, many=True)
-    
-    # Return the serialized data
+
     return Response(serialized_data.data, status=status.HTTP_200_OK)
 
-@api_view(['POST'])
-def get_latest_health_by_username(request):
-    # Retrieve the user by username, return 404 if not found
-    print(request.data.get("username"))
-    user = User.objects.get(username=request.data.get("username"))
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def get_latest_health(request):
 
-    # Retrieve the latest health data object associated with the user
+    user = request.user
     latest_healthdata = models.HealthData.objects.filter(personid=user.id).order_by('-timestamp').first()
 
     if latest_healthdata is not None:
-        # Serialize the latest health data object
+
         serialized_data = serializers.HealthDataSerializer(latest_healthdata)
-        # Return the serialized data
         return Response(serialized_data.data, status=status.HTTP_200_OK)
     else:
-        # Return 404 if no health data is found for the user
         return Response({"detail": "No health data found for this user"}, status=status.HTTP_404_NOT_FOUND)
     
 @api_view(['POST'])
+@permission_classes([IsAuthenticated])
 def add_health_data(request):
-    try:
-        user = User.objects.get(username=request.data.get("username"))
 
-    except:
-        return Response("No such user exists.", status=status.HTTP_404_NOT_FOUND)
+    user = request.user
+
     temperature = request.data.get("temperature")
     oxygen = request.data.get("oxygen")
     pulse = request.data.get("pulse")

@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'profiles',
     'symptoms',
     'user',
+    'reminders',
     'rest_framework_simplejwt',
 ]
 
