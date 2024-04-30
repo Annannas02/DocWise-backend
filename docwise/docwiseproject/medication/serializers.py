@@ -7,4 +7,3 @@ class MedicationSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Medication
         fields = '__all__'
-    
