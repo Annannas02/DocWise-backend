@@ -25,7 +25,7 @@ def modify_profile(request):
         img = request.data.get("photo"),
         dob = request.data.get("dob")
         )
-    serialized_profile = serializers.ProfileSerializer(profile)
-    return Response(serialized_profile.data, status=status.HTTP_200_OK)
+
+    return Response("Profile updated.", status=status.HTTP_200_OK)
 
     

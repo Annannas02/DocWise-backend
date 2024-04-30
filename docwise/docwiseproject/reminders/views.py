@@ -2,7 +2,8 @@ from rest_framework import generics
 from reminders import models, serializers
 from rest_framework import generics
 from rest_framework.response import Response
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import IsAuthenticated
 from rest_framework import status
 from .models import Reminders
 from .serializers import ReminderSerializer
@@ -21,8 +22,10 @@ def add_reminder(request):
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['GET'])
+@permission_classes([IsAuthenticated])
 def get_reminders(request):
-    reminders = Reminders.objects.all()
+    # Filter reminders based on medication belonging to the authenticated user
+    reminders = Reminders.objects.filter(medicationid__personid=request.user)
     serializer = ReminderSerializer(reminders, many=True)
     return Response(serializer.data)
 
